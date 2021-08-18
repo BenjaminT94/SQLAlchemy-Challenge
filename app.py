@@ -89,7 +89,7 @@ def starting_calc(start):
      return jsonify(start_tobs_list)                    
                             
 @app.route("/api/v1.0/<start>/<end>")
-# Defububg start and end date in the "desired" Python format
+# start and end date in the "desired" Python format
 def ending_calc(start,end):
      start = datetime.strptime('2016-08-23', '%Y-%m-%d').date()                      
      end = datetime.strptime('2017-08-23', '%Y-%m-%d').date()

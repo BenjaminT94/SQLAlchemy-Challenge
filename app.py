@@ -71,7 +71,7 @@ def precipitation():
 # When given the start only, calculate TMIN, TAVG, and TMAX for all dates greater than and equal to the start date.
 # When given the start and the end date, calculate the TMIN, TAVG, and TMAX for dates between the start and end date inclusive.                                                                    
 @app.route("/api/v1.0/<start>")
-def calc_temps_start(start):
+def starting_calc(start):
      start = datetime.strptime('2016-08-23', '%Y-%m-%d').date()
      start_data = session.query(func.avg(Measurement.tobs),func.max(Measurement.tobs),func.min(Measurement.tobs).\
                filter(Measurement.date >= start)
@@ -85,7 +85,7 @@ def calc_temps_start(start):
      return jsonify(start_tobs_list)                    
                             
 @app.route("/api/v1.0/<start>/<end>")
-def calc_temps_end(start,end):
+def ending_calc(start,end):
      start = datetime.strptime('2016-08-23', '%Y-%m-%d').date()                      
      end = datetime.strptime('2017-08-23', '%Y-%m-%d').date()
      end_data = session.query(func.avg(Measurement.tobs),func.max(Measurement.tobs),func.min(Measurement.tobs).\

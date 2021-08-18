@@ -35,9 +35,9 @@ def intro():
     
 @app.route("/api/v1.0/precipitation")    
 def precipitation():
-    last_yr = dt.date(2017,8,23) - dt.timedelta(days = 365)
+    last_year = dt.date(2017,8,23) - dt.timedelta(days = 365)
     last_day = session.query(Measurement.date).order_by(Measurement.date.desc()).first()
-    precipitation = session.query(Measurement.date, Measurement.prcp).\
+    precip = session.query(Measurement.date, Measurement.prcp).\
         filter(Measurement.date > last_yr).order_by(Measurement.date).all()
 
 #Creating a dictionary with date and precipitation
@@ -51,13 +51,13 @@ def precipitation():
 
 @app.route("/api/v1.0/stations")
 #Return a JSON list of stations from the dataset.
-    station_results = session.query(Stations.station).all()
+    station_data = session.query(Stations.station).all()
     station_all = list(np.ravel(results))
     return jsonify(station_all)
     
 @app.route("/api/v1.0/tobs")
 #Return a JSON list of Temperature Observations (tobs) for the previous year.
-    tobs_results = session.query(Measurement.station, Measurement.tobs).\
+    tobs_data = session.query(Measurement.station, Measurement.tobs).\
     filter(Measurement.date.between('2016-08-23', '2017-08-23')).all()
     list = []
     for i in tobs_results:
@@ -73,7 +73,7 @@ def precipitation():
 @app.route("/api/v1.0/<start>")
 def calc_temps_start(start):
      start = datetime.strptime('2016-08-23', '%Y-%m-%d').date()
-     start_results = session.query(func.avg(Measurement.tobs),func.max(Measurement.tobs),func.min(Measurement.tobs).\
+     start_data = session.query(func.avg(Measurement.tobs),func.max(Measurement.tobs),func.min(Measurement.tobs).\
                filter(Measurement.date >= start)
      start_tobs_list = []   
      for i in start_results:
@@ -88,7 +88,7 @@ def calc_temps_start(start):
 def calc_temps_end(start,end):
      start = datetime.strptime('2016-08-23', '%Y-%m-%d').date()                      
      end = datetime.strptime('2017-08-23', '%Y-%m-%d').date()
-     end_results = session.query(func.avg(Measurement.tobs),func.max(Measurement.tobs),func.min(Measurement.tobs).\
+     end_data = session.query(func.avg(Measurement.tobs),func.max(Measurement.tobs),func.min(Measurement.tobs).\
                filter(Measurement.date >= start)                     
      start_end_tobs_list = []
      for i in start_end_tobs_list:

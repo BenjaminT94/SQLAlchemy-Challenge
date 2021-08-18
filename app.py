@@ -24,7 +24,7 @@ app = Flask(__name__)
 #Making routes
 @app.route("/")
 def homepage():
-    """List all apis"""
+    """Listing APIs as a directory"""
     return(
         f"Available Routes:<br/>"
         f"/api/v1.0/precipitation<br/>"
@@ -38,7 +38,7 @@ def precipitation():
     last_year = dt.date(2017,8,23) - dt.timedelta(days = 365)
     last_day = session.query(Measurement.date).order_by(Measurement.date.desc()).first()
     precip = session.query(Measurement.date, Measurement.prcp).\
-        filter(Measurement.date > last_yr).order_by(Measurement.date).all()
+        filter(Measurement.date > last_year).order_by(Measurement.date).all()
 
 #Creating a dictionary with date and precipitation
     precipitation_data = []
@@ -47,6 +47,7 @@ def precipitation():
         data['date'] = precipitation[0]
         data['prcp'] = precipitation[1]
         precipitation_data.append(data)
+# Returning date and precipitation rate as json
     return jsonify(precipitation_data)
 
 @app.route("/api/v1.0/stations")
@@ -57,6 +58,7 @@ def precipitation():
     
 @app.route("/api/v1.0/tobs")
 #Return a JSON list of Temperature Observations (tobs) for the previous year.
+# Keeping in mind to filter for within the the year of specified date
     tobs_data = session.query(Measurement.station, Measurement.tobs).\
     filter(Measurement.date.between('2016-08-23', '2017-08-23')).all()
     list = []

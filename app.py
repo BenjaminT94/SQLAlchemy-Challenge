@@ -56,7 +56,6 @@ def precipitation():
     return jsonify(station_all)
     
 @app.route("/api/v1.0/tobs")
-#query for the dates and temperature observations from a year from the last data point.
 #Return a JSON list of Temperature Observations (tobs) for the previous year.
     tobs_results = session.query(Measurement.station, Measurement.tobs).\
     filter(Measurement.date.between('2016-08-23', '2017-08-23')).all()

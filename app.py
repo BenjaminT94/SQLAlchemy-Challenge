@@ -61,6 +61,7 @@ def precipitation():
 # Keeping in mind to filter for within the the year of specified date
     tobs_data = session.query(Measurement.station, Measurement.tobs).\
     filter(Measurement.date.between('2016-08-23', '2017-08-23')).all()
+    # Creating a list of dictionaries to append values
     list = []
     for i in tobs_results:
        dict = {}
@@ -77,6 +78,7 @@ def starting_calc(start):
      start = datetime.strptime('2016-08-23', '%Y-%m-%d').date()
      start_data = session.query(func.avg(Measurement.tobs),func.max(Measurement.tobs),func.min(Measurement.tobs).\
                filter(Measurement.date >= start)
+     # Creating a list of dictionaries to append values
      start_tobs_list = []   
      for i in start_results:
        dict = {}
@@ -87,6 +89,7 @@ def starting_calc(start):
      return jsonify(start_tobs_list)                    
                             
 @app.route("/api/v1.0/<start>/<end>")
+# Defububg start and end date in the "desired" Python format
 def ending_calc(start,end):
      start = datetime.strptime('2016-08-23', '%Y-%m-%d').date()                      
      end = datetime.strptime('2017-08-23', '%Y-%m-%d').date()

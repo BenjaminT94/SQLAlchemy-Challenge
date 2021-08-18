@@ -23,7 +23,7 @@ app = Flask(__name__)
 
 #Making routes
 @app.route("/")
-def intro():
+def homepage():
     """List all apis"""
     return(
         f"Available Routes:<br/>"

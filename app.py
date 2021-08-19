@@ -73,6 +73,7 @@ def Station():
 @app.route("/api/v1.0/tobs")
 #Return a JSON list of Temperature Observations (tobs) for the previous year.
 # Keeping in mind to filter for within the the year of specified date
+def tobs():
     tobs_data = session.query(Measurement.station, Measurement.tobs).\
     filter(Measurement.date.between('2016-08-23', '2017-08-23')).all()
     # Creating a list of dictionaries to append values
@@ -93,11 +94,11 @@ def starting_calc(start):
      start_data = session.query(func.avg(Measurement.tobs),func.max(Measurement.tobs),func.min(Measurement.tobs).\
                filter(Measurement.date >= start)
      # Creating a list of dictionaries to append values
-     start_tobs_list = []   
+    start_tobs_list = []   
      for i in start_results:
        dict = {}
-       dict["TMIN"] = float(tobs[1])                     
        dict["TMAX"] = float(tobs[0])
+       dict["TMIN"] = float(tobs[1])                     
        dict["TAVG"] = float(tobs[2])
        start_tobs_list.append(dict)
      return jsonify(start_tobs_list)                    

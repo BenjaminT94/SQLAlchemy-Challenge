@@ -110,6 +110,7 @@ def temp_start(start):
 @app.route("/api/v1.0/start/end")
 # Same as above but include start and end date
 def temp_start_end(start, end):
+    session = Session(engine)
     results = session.query(func.min(Measurement.tobs), func.avg(Measurement.tobs), func.max(Measurement.tobs)).\
                 filter(Measurement.date >= start).filter(Measurement.date <= end).all()
 
@@ -118,9 +119,9 @@ def temp_start_end(start, end):
     start_end_obs = []
     for min, avg, max in results:
         start_end_tobs_dict = {}
-        start_end_tobs_dict["min_temp"] = min
-        start_end_tobs_dict["avg_temp"] = avg
-        start_end_tobs_dict["max_temp"] = max
+        start_end_tobs_dict["Min"] = min
+        start_end_tobs_dict["Average"] = avg
+        start_end_tobs_dict["Max"] = max
         start_end_obs.append(start_end_tobs_dict)   
                                  
 if __name__ == '__main__':

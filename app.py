@@ -7,6 +7,7 @@ import datetime as dt
 from sqlalchemy.ext.automap import automap_base
 from sqlalchemy.orm import Session
 from sqlalchemy import create_engine, func
+from sqlalchemy.sql.selectable import Lateral
 
 #Creating engine and reflection
 engine = create_engine("sqlite:///Resources/hawaii.sqlite")
@@ -52,9 +53,22 @@ def precipitation():
 
 @app.route("/api/v1.0/stations")
 #Return a JSON list of stations from the dataset.
-    station_data = session.query(Stations.station).all()
-    station_all = list(np.ravel(results))
-    return jsonify(station_all)
+def Station():
+    session = Session(engine)
+    station_data= [Station.station,Station.name,Station.latitude,Station.longitude,Station.elevation]
+    result= session.query(*station_data).all()
+    session.close()
+
+    stations=[]
+    for i in result:
+        station_dict={}
+        station_dict["Name"] = name
+        station_dict["Station"]= station
+        station_dict["Lat"] = Lat
+        station_dict["Lon"] = lon 
+        station_dict["Elevation"] = elevation
+        stations.append(station_dict)
+    return jsonify(stations)
     
 @app.route("/api/v1.0/tobs")
 #Return a JSON list of Temperature Observations (tobs) for the previous year.

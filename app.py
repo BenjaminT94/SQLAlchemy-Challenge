@@ -89,35 +89,37 @@ def tobs():
 # When given the start only, calculate TMIN, TAVG, and TMAX for all dates greater than and equal to the start date.
 # When given the start and the end date, calculate the TMIN, TAVG, and TMAX for dates between the start and end date inclusive.                                                                    
 @app.route("/api/v1.0/<start>")
-def starting_calc(start):
-     start = datetime.strptime('2016-08-23', '%Y-%m-%d').date()
-     start_data = session.query(func.avg(Measurement.tobs),func.max(Measurement.tobs),func.min(Measurement.tobs).\
-               filter(Measurement.date >= start)
-     # Creating a list of dictionaries to append values
-    start_tobs_list = []   
-     for i in start_results:
-       dict = {}
-       dict["TMAX"] = float(tobs[0])
-       dict["TMIN"] = float(tobs[1])                     
-       dict["TAVG"] = float(tobs[2])
-       start_tobs_list.append(dict)
-     return jsonify(start_tobs_list)                    
+def temp_start(start):
+    session = Session(engine)
+    result = session.query(func.min(Measurement.tobs), func.avg(Measurement.tobs), func.max(Measurement.tobs)).\
+        filter(Measurement.date >= start).all()
+    session.close()
+
+    tobsall = []
+    for min,avg,max in result:
+        tobs_dict = {}
+        tobs_dict["Min"] = min
+        tobs_dict["Average"] = avg
+        tobs_dict["Max"] = max
+        tobsall.append(tobs_dict)
+
+    return jsonify(tobsall)                 
                             
 @app.route("/api/v1.0/<start>/<end>")
 # start and end date in the "desired" Python format
-def ending_calc(start,end):
-     start = datetime.strptime('2016-08-23', '%Y-%m-%d').date()                      
-     end = datetime.strptime('2017-08-23', '%Y-%m-%d').date()
-     end_data = session.query(func.avg(Measurement.tobs),func.max(Measurement.tobs),func.min(Measurement.tobs).\
-               filter(Measurement.date >= start)                     
-     start_end_tobs_list = []
-     for i in start_end_tobs_list:
-       dict = {}
-       dict["TMIN"] = float(tobs[1])                     
-       dict["TMAX"] = float(tobs[0])
-       dict["TAVG"] = float(tobs[2])
-       start_end_tobs_list.append(dict)
-     return jsonify(start__end_tobs_list)   
+def temp_start_end(start_date, end_date):
+    results = session.query(func.min(Measurement.tobs), func.avg(Measurement.tobs), func.max(Measurement.tobs)).\
+                filter(Measurement.date >= start_date).filter(Measurement.date <= end_date).all()
+
+    session.close()
+  
+    start_end_tobs = []
+    for min, avg, max in results:
+        start_end_tobs_dict = {}
+        start_end_tobs_dict["min_temp"] = min
+        start_end_tobs_dict["avg_temp"] = avg
+        start_end_tobs_dict["max_temp"] = max
+        start_end_tobs.append(start_end_tobs_dict)   
                                  
 if __name__ == '__main__':
      app.run(debug=True)                            

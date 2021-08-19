@@ -91,35 +91,35 @@ def tobs():
 @app.route("/api/v1.0/<start>")
 def temp_start(start):
     session = Session(engine)
-    result = session.query(func.min(Measurement.tobs), func.avg(Measurement.tobs), func.max(Measurement.tobs)).\
+    results = session.query(func.min(Measurement.tobs), func.avg(Measurement.tobs), func.max(Measurement.tobs)).\
         filter(Measurement.date >= start).all()
     session.close()
 
-    tobsall = []
-    for min,avg,max in result:
-        tobs_dict = {}
-        tobs_dict["Min"] = min
-        tobs_dict["Average"] = avg
-        tobs_dict["Max"] = max
-        tobsall.append(tobs_dict)
+    observations = []
+    for min,avg,max in results:
+        start_tobs_dict = {}
+        start_tobs_dict["Min"] = min
+        start_tobs_dict["Average"] = avg
+        start_tobs_dict["Max"] = max
+        observations.append(start_tobs_dict)
 
-    return jsonify(tobsall)                 
+    return jsonify(observations)                 
                             
 @app.route("/api/v1.0/<start>/<end>")
-# start and end date in the "desired" Python format
-def temp_start_end(start_date, end_date):
+# Same as above but include start and end date
+def temp_start_end(start, end):
     results = session.query(func.min(Measurement.tobs), func.avg(Measurement.tobs), func.max(Measurement.tobs)).\
-                filter(Measurement.date >= start_date).filter(Measurement.date <= end_date).all()
+                filter(Measurement.date >= start).filter(Measurement.date <= end).all()
 
     session.close()
   
-    start_end_tobs = []
+    start_end_obs = []
     for min, avg, max in results:
         start_end_tobs_dict = {}
         start_end_tobs_dict["min_temp"] = min
         start_end_tobs_dict["avg_temp"] = avg
         start_end_tobs_dict["max_temp"] = max
-        start_end_tobs.append(start_end_tobs_dict)   
+        start_end_obs.append(start_end_tobs_dict)   
                                  
 if __name__ == '__main__':
      app.run(debug=True)                            

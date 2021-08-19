@@ -122,7 +122,8 @@ def temp_start_end(start, end):
         start_end_tobs_dict["Min"] = min
         start_end_tobs_dict["Average"] = avg
         start_end_tobs_dict["Max"] = max
-        start_end_obs.append(start_end_tobs_dict)   
+        start_end_obs.append(start_end_tobs_dict) 
+    return jsonify(start_end_obs)
                                  
 if __name__ == '__main__':
      app.run(debug=True)                            

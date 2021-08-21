@@ -40,6 +40,7 @@ def precipitation():
     result= session.query(*data).all()
     session.close()
     precipitation =[]
+    # From here on out for the remaining routes, I will create dictionaries to append to my list to display query results
     for date, precip in result:
         precip_dict={}
         precip_dict["Date"]=date

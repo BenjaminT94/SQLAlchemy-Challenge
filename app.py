@@ -7,7 +7,6 @@ import datetime as dt
 from sqlalchemy.ext.automap import automap_base
 from sqlalchemy.orm import Session
 from sqlalchemy import create_engine, func
-from sqlalchemy.sql.selectable import Lateral
 
 #Creating engine and reflection
 engine = create_engine("sqlite:///Resources/hawaii.sqlite")

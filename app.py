@@ -74,6 +74,7 @@ def tobs():
     session=Session(engine)
     latestdate = session.query(Measurement.date).order_by(Measurement.date.desc()).first()[0]
     latestformatted = dt.datetime.strptime(latestdate,'%Y-%m-%d')
+    # Going back one year from the latest date
     date = dt.date(latestformatted.year-1,latestformatted.month,latestformatted.day)
     data=[Measurement.date,Measurement.tobs]
     result=session.query(*data).filter(Measurement.date >= date).all()
@@ -83,6 +84,7 @@ def tobs():
         tobs_dict = {}
         tobs_dict["Date"] = date
         tobs_dict["Temperature Observations"] = tobs
+        alltobs.append(tobs_dict)
     return jsonify(alltobs)
  
 

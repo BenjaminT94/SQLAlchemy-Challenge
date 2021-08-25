@@ -53,18 +53,15 @@ def precipitation():
 #Return a JSON list of stations from the dataset.
 def Stations():
     session = Session(engine)
-    station_data= [Station.station,Station.name,Station.latitude,Station.longitude,Station.elevation]
+    station_data= [Station.station,Station.name]
     result= session.query(*station_data).all()
     session.close()
 
     Stations=[]
-    for station,name,Lat,lon,elevation in result:
+    for station,name in result:
         station_dict={}
         station_dict["Station"]= station
         station_dict["Name"] = name
-        station_dict["Lat"] = Lat
-        station_dict["Lon"] = lon 
-        station_dict["Elevation"] = elevation
         Stations.append(station_dict)
     return jsonify(Stations)
     
